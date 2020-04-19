@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		body{
+			/*初始化*/
+			margin:0;
+			padding: 0;
+			background-color: #33a3dc;
+		}
+		.alink{
+			display: block;
+			margin-top: 200px;
+			margin-left: 700px;
+		}
+		.rule{
+			font-color:black;
+			background-color: white;
+			width:700px;
+			height:220px;
+			position:absolute;
+			top:250px;
+			left:400px;
+		}
+	</style>
+</head>
+<body>
+
+	<a href="index.html" class="alink">
+		<button class="btn btn-default">开始游戏</button>
+	</a>
+	<div class="rule">
+		<span>
+		游戏规则：<br>1、对局双方各执一色棋子。<br>2、空棋盘开局。<br>3、黑棋虽先行，但有禁手：黑方不能在一步之内形成两个“活三”“活四”或一步之内形成“长连”（指一步形成超过五子连珠）。白方自由，无禁手。<br>
+		4、棋子下在棋盘的空白点上，棋子下定后，不得向其它点移动，不得从棋盘上拿掉或拿起另落别处。<br>5、黑方的第一枚棋子可下在棋盘任意交叉点上。<br>6、轮流下子是双方的权利，但允许任何一方放弃下子权（即：PASS权）<br>7、获胜的判定：只要黑白方中任意一方的棋子有五子连在一起（即五子连珠），可以为横连、纵连、斜连，则该方获胜，游戏结束。（只要对手形成了“死四”（即一头无己方棋子阻挡），则己方应当采取“防御”措施了。用己方棋子堵住对手“死四”不“死”的一端，保证对手不能形成五子连珠。）
+	</span>
+	</div>
+	
+</body>
+</html>

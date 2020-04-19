@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>五子棋</title>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="index.css">
+	
+</head>
+<body>
+
+	<!-- 创建一个画布 -->
+	<!-- 修改样式而不是尺寸 -->
+		<canvas id="canvas" width="450px" height="450px"></canvas>
+		<button id="yes" class="btn btn-default">悔棋</button>
+		<button id="no" class="btn btn-default">撤销悔棋</button>
+<script>
+	let canvas = document.getElementById("canvas");
+	let yes = document.getElementById("yes");
+	let no = document.getElementById("no");
+    //2d绘制环境 画笔
+	let drawEnvironment = canvas.getContext('2d');
+	//棋子的颜色
+	let chessColor = ['black','white'];
+	//步数 实现交换手
+	let step = 0;
+	//定义四种模式
+	let styleMode = [
+		[1,0], //水平
+		[0,1], //竖直
+		[1,1], //右下左上
+		[1,-1] //右上左下
+	];
+	//用数组记录棋盘信息
+	let mapBox = [];
+	for(let i = 0; i < 14; i++){
+		mapBox[i] = [];
+		for(var j = 0; j < 14; j++){
+			mapBox[i][j] = 0;
+		}
+	}
+	// console.log(mapBox);
+	//绘制棋盘
+	for(var i = 1; i < 15; i++){
+		drawEnvironment.moveTo(30*i,30);
+		drawEnvironment.lineTo(30*i,420);
+		drawEnvironment.moveTo(30,30*i);
+		drawEnvironment.lineTo(420,30*i);
+	}
+	drawEnvironment.stroke(); //描轮廓
+	
+
+	//绘制棋子
+	let drawChess = (x,y,color) => {
+		drawEnvironment.fillStyle = color;
+		drawEnvironment.beginPath();
+		//arc有6个参数 第一第二个是圆心的位置 第三个是半径 第四第五是弧线 第六是逆时针还是顺时针
+		drawEnvironment.arc(x,y,15,0,Math.PI*2,false);
+		drawEnvironment.fill();
+		drawEnvironment.stroke();
+	}
+
+	canvas.addEventListener('click',event => {
+		//棋只能下在交点的地方
+		let vx = Math.floor((event.offsetX+15)/30)-1;
+		let vy = Math.floor((event.offsetY+15)/30)-1;
+		//为了阻止棋盘外面也可以下棋
+		if((vx+1)*30 == 0 || (vy+1)*30 == 0 | (vx+1)*30 == 450 || (vy+1)*30 == 450){
+			return;
+		}
+		//为了防止在一个点重复下棋
+		if(mapBox[vx][vy] == 0){
+			drawChess((vx+1)*30,(vy+1)*30,chessColor[step%2]);
+			mapBox[vx][vy] = chessColor[step%2];
+			whoWin(vx,vy,chessColor[step%2],styleMode[0]);
+			whoWin(vx,vy,chessColor[step%2],styleMode[1]);
+			whoWin(vx,vy,chessColor[step%2],styleMode[2]);
+			whoWin(vx,vy,chessColor[step%2],styleMode[3]);
+			step++;
+		}
+	})
+
+	//判断胜负
+	let whoWin = (x,y,color,styleMode) => {
+		let count = 0;
+		//以当前的落子为基准
+		//正方向
+		for(let i = 1; i < 5; i++){
+			if(mapBox[x+i*styleMode[0]]){
+				if(mapBox[x+i*styleMode[0]][y+i*styleMode[1]] == color){
+					count++;
+				}else{
+					break;
+				}
+			}
+		}
+		//反方向
+		for(let i = 1; i < 5; i++){
+			if(mapBox[x-i*styleMode[0]]){
+				if(mapBox[x-i*styleMode[0]][y-i*styleMode[1]] == color){
+					count++;
+				}else{
+					break;
+				}
+			}
+		}
+		if(count >= 4){
+			alert(color+' win')
+		}
+	}
+	//悔棋功能
+	yes.onclick = event =>{
+		let wx = Math.floor((event.offsetX+15)/30)-1;
+		let wy = Math.floor((event.offsetY+15)/30)-1;
+		clearChess(wx,wy);
+	}
+
+	//销毁棋子的方法
+	let clearChess = (i,j) =>{
+		//擦掉棋子
+		drawEnvironment.clearRect(i,j,30,30);
+		//重新画格子
+		drawEnvironment.beginPath();
+		drawEnvironment.moveTo(15+i,j);
+		drawEnvironment.lineTo(15+i,j+30);
+		drawEnvironment.moveTo(i,j+15);
+		drawEnvironment.lineTo((i/30+1)*30,j+15);
+		drawEnvironment.stroke();
+	}
+
+</script>
+
+</body>
+</html>
